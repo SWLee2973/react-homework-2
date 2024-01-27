@@ -1,7 +1,7 @@
 import React from 'react';
 import './Product.css';
 import productsData from '../data/products.json';
-import Product, {productProps} from './product';
+import Product, { productProps } from './Product';
 
 
 const Products = () => {

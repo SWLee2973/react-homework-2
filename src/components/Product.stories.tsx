@@ -1,20 +1,21 @@
 import React from 'react';
 import { StoryFn } from '@storybook/react';
-import Product, { productProps } from './Products';
+import Products from './Products';
+import { productProps } from './Product';
 
 export default {
-  component: Product,
+  component: Products,
   title: 'Product',
 };
 
-const Template: StoryFn<productProps> = () => <Product />;
+const Template: StoryFn<productProps> = () => <Products />;
 
 export const Default = Template.bind({});
 Default.args = {
   task: {
     id: '1',
-    title: 'Test Task',
-    state: 'TASK_INBOX',
+    title: 'Products',
+    state: 'List_PRINT',
     updatedAt: new Date(2024, 0, 1, 9, 0),
   },
 }

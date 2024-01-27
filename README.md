@@ -1,91 +1,116 @@
-<p align="center">
-  <a href="https://www.chromatic.com/">
-    <img alt="Chromatic" src="https://avatars2.githubusercontent.com/u/24584319?s=200&v=4" width="60" />
-  </a>
-</p>
+# React-Homework 2
 
-<h1 align="center">
-  Chromatic's Intro to Storybook React template
-</h1>
+## 1. 바닐라 프로젝트때의 일부분을 리액트 컴포넌트로 리스트 렌더링하기
+> [페이지 링크 이동](https://sang-react2.netlify.app/)
 
-This template ships with the main React and Storybook configuration files you'll need to get up and running fast.
 
-## 🚅 Quick start
+### 1. 과제 주제
+> 바닐라 프로젝트의 일부분인 상품 카드를 리액트의 리스트 렌더링으로 구성해보고자 했다.
 
-1.  **Create the application.**
+### 2. 코드 작성 과정
 
-    Use [degit](https://github.com/Rich-Harris/degit) to get this template.
+1) 과제 스케폴딩
+---
+- `yarn` 사용
+- `storybook` 사용
+- `TypeScript` 사용
+- `vite` 사용
+- `netlify`를 이용해 배포
 
-    ```shell
-    # Clone the template
-    npx degit chromaui/intro-storybook-react-template taskbox
-    ```
+2) Storybook 튜토리얼
+---
+- https://storybook.js.org/tutorials/intro-to-storybook/react/ko/get-started/
+- 튜토리얼 페이지를 참고해 `Task` 컴포넌트를 먼저 등록해보았다.
+```ts
+/* Task.tsx */
+import React from 'react';
 
-1.  **Install the dependencies.**
+export interface taskProps {
+  task: {id:string, title: string, state: string};
+  onArchiveTask?: string;
+  onPinTask?: string;
+}
 
-    Navigate into your new site’s directory and install the necessary dependencies.
+const Task: React.FunctionComponent<taskProps> = ({ 
+  task: {id, title}, 
+  onArchiveTask, 
+  onPinTask }) => {
+  return (
+    <div className="list-item">
+      <input type="text" value={title} readOnly={true} />
+    </div>
+  )
+}
 
-    ```shell
-    # Navigate to the directory
-    cd taskbox/
 
-    # Install the dependencies
-    yarn
-    ```
+export default Task;
+```
 
-1.  **Open the source code and start editing!**
+3) Product 컴포넌트 제작
+---
+- `product`의 데이터는 프로젝트때의 포켓베이스 데이터를 console로 찍어 얻게 된 자료를 사용했다.
+- 각 배경 이미지의 주소는 포켓베이스 api를 사용한 이미지 주소 호출 방식을 사용했는데.. 문제가 있었다.
+> netlify에 배포 후 알게 된 사실인데... 셀프 호스팅 포켓베이스를 사용하다보니 ssl이 적용되지 않은 http를 사용하게 되어<br />
+> https로 호스팅되는 netlify에서 mix-content 에러때문에 이미지가 모두 깨지는 현상이 발생했었다..<br />
+> apache에 ssl을 적용하는 방법이 꽤나 복잡하고 귀찮아서 우선은 프로젝트 때 사용했던 포켓베이스 주소로 바꾸어 배포했다.
 
-    Open the `taskbox` directory in your code editor of choice and building your first component!
+```ts
+/* Product.tsx */
+const Product = (product: productProps) => {
 
-1.  **Browse your stories!**
+  return (
+  <li className='product'>
+    <a href="#">
+      <Thumbnail {...product} />
+      {product.brand_id && <p className="brand_id">{product.product_name}</p>}
+      <p className="title">{product.product_name}</p>
+      <Price {...product} />
+      <span className="description">{product.product_description}</span>
+      <Keyword {...product}/>
+    </a>
+  </li>  
 
-    Run `yarn storybook` to see your component's stories at `http://localhost:6006`
+  )
+}
+```
 
-## 🔎 What's inside?
+4) `Products`에서 `Product`를 `Array.map`으로 렌더링
+---
+- Product를 뿌려주기 위한 Products 컴포넌트를 만들어 각각 렌더링하도록 구성했다.
+```ts
+import productsData from '../data/products.json';
+import Product, {productProps} from './product';
 
-A quick look at the top-level files and directories included with this template.
+const Products = () => {
+  
+  return (
+    <ul style={{
+      margin: 0,
+      padding: 0,
+      display: "flex",
+      gap: "16px",
+      flexFlow: "row wrap"
+    }}>
+      {
+        productsData.map((product:productProps) => (
+          <Product key={product.id} {...product}/>
+        ))
+      }
+    </ul>
+  )
+}
 
-    .
-    ├── .storybook
-    ├── node_modules
-    ├── public
-    ├── src
-    ├── .gitignore
-    ├── .index.html
-    ├── LICENSE
-    ├── package.json
-    ├── yarn.lock
-    ├── vite.config.js
-    └── README.md
+export default Products;
+```
 
-1.  **`.storybook`**: This directory contains Storybook's [configuration](https://storybook.js.org/docs/react/configure/overview) files.
+5) `Product` 컴포넌트를 `Storybook`로 전달
+- 튜토리얼 Task와 마찬가지로 Product.stories.tsx를 생성해 Storybook으로 전달했다.
+ ![Storybook](./screenshots/storybook.png)
 
-2.  **`node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages).
 
-3.  **`public`**: This directory will contain the development and production build of the site.
-
-4.  **`src`**: This directory will contain all of the code related to what you will see on your application.
-
-5.  **`.gitignore`**: This file tells git which files it should not track or maintain during the development process of your project.
-
-6.  **`.index.html`**: This is the HTML page that is served when generating a development or production build.
-
-7.  **`LICENSE`**: The template is licensed under the MIT licence.
-
-8.  **`package.json`**: Standard manifest file for Node.js projects, which typically includes project specific metadata (such as the project's name, the author among other information). It's based on this file that npm will know which packages are necessary to the project.
-
-9.  **`yarn.lock`**: This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(Do not change it manually).**
-
-10. **`vite.config.js`**: This is the configuration file for [Vite](https://vitejs.dev/), a build tool that aims to provide a faster and leaner development experience for modern web projects.
-
-11. **`README.md`**: A text file containing useful reference information about the project.
-
-## Contribute
-
-If you encounter an issue with the template, we encourage you to open an issue in this template's repository.
-
-## Learning Storybook
-
-1. Read our introductory tutorial at [Learn Storybook](https://storybook.js.org/tutorials/intro-to-storybook/react/en/get-started/).
-2. Learn how to transform your component libraries into design systems in our [Design Systems for Developers](https://storybook.js.org/tutorials/design-systems-for-developers/) tutorial.
-3. See our official documentation at [Storybook](https://storybook.js.org/).
+### 3. 마치며
+---
+> 앞으로의 리액트 수업에서 타입스크립트를 사용하고자 연습하는 겸 타입스크립트로 과제를 도전해봤다.<br />
+> 어쩌다 보니 storybook의 바람이 불어넣어져 storybook 스케폴딩으로 시작을 해버리는 바람에 타입스크립트의 설정에 많이 애먹고 포기한 부분이 꽤 많았다. <br />
+> 수업에 본격적으로 들어갈 때는 딱 타입스크립트만 사용해서 연습해야겠다고 생각했다.<br />
+> 질의응답에 몇 가지 질문을 올리고 싶은게 있었는데 Storybook 설정과 충돌나서 안되는 부분이 분명히 있으리라... 생각하고 이후에 생기는대로 모두 올려볼 생각이다!!
