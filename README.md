@@ -105,7 +105,7 @@ export default Products;
 
 5) `Product` 컴포넌트를 `Storybook`로 전달
 - 튜토리얼 Task와 마찬가지로 Product.stories.tsx를 생성해 Storybook으로 전달했다.
- ![Storybook](./screenshots/storybook.png)
+ ![Storybook](./screenshots/Storybook.png)
 
 
 ### 3. 마치며
