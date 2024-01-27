@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "jsx": "react",
+    "lib": ["ES6", "DOM"],
+    "baseUrl": ".",
+    "paths": {
+      "src/components": ["src/components/*"]
+    },
+    "rootDir": "src",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ],
+}
