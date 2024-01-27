@@ -56,6 +56,27 @@ export default Task;
 
 ```ts
 /* Product.tsx */
+export interface productProps {
+  id: string,
+  collectionId: string,
+  product_name: string,
+  product_img: string,
+  brand_id?: string,
+  price: number,
+  discount?: number,
+  product_description: string,
+  karly_only?: number,
+  limit?: number,
+  category_id: string[],
+  collectionName: string,
+  created: string,
+  delivery_type: string,
+  etc?: object,
+  packaging_type: string,
+  product_detail_img: string,
+  updated: string
+}
+
 const Product = (product: productProps) => {
 
   return (
